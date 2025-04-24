@@ -20,13 +20,13 @@ def detect_issues(kpis: dict) -> str:
     """
 
     try:
-        response = openai.Completion.create(
-            model="gpt-3.5-turbo",  # Replace this with OpenRouter's actual model name
-            prompt=alert_prompt,
+        response = openai.ChatCompletion.create(
+            model="openai/gpt-3.5-turbo",  # ✅ Corrected
+            messages=[{"role": "user", "content": alert_prompt}],
             temperature=0.5,
             max_tokens=250
         )
-        return response.choices[0].text.strip()
+        return response.choices[0].message["content"].strip()
     except openai.OpenAIError as e:
         print(f"Error: {e}")
         return "An error occurred while generating alerts."

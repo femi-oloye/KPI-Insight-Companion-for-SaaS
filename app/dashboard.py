@@ -9,7 +9,7 @@ import os
 
 # Set OpenRouter API base and key
 openai.api_base = "https://openrouter.ai/api/v1"
-openai.api_key = os.getenv("OPENROUTER_API_KEY")  # Use the correct API key
+openai.api_key = os.getenv("OPENROUTER_API_KEY")
 
 st.set_page_config(page_title="SaaS KPI Agent", layout="wide")
 
@@ -19,10 +19,8 @@ df = pd.read_csv("data/mock_saas_data.csv", parse_dates=["date"])
 # Calculate Monthly Subscription Fee per Active User
 df["monthly_subscription_fee"] = df["revenue"] / df["active_users"]
 
-# Calculate MRR (Revenue for the month already represents MRR)
+# Calculate MRR and ARR
 df["mrr"] = df["revenue"]
-
-# Calculate ARR (Annual Recurring Revenue)
 df["arr"] = df["mrr"] * 12
 
 # Calculate KPIs
@@ -30,7 +28,6 @@ kpis = calculate_kpis(df)
 
 # Show KPI Cards
 st.markdown("### 📊 Key Performance Indicators")
-
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 col1.metric("CAC", f"${kpis['CAC']}")
 col2.metric("LTV", f"${kpis['LTV']}")
@@ -61,7 +58,7 @@ if user_question:
             CAC: ${kpis['CAC']}
             LTV: ${kpis['LTV']}
             Conversion Rate: {kpis['Conversion Rate']}%
-            Churn Rate: {kpis['Churn Rate']}
+            Churn Rate: {kpis['Churn Rate']}%
             MRR: ${df['mrr'].sum():,.2f}
             ARR: ${df['arr'].sum():,.2f}
 
@@ -69,12 +66,11 @@ if user_question:
             Answer in a clear, helpful tone.
             """
             response = openai.ChatCompletion.create(
-                model="openrouter/openai/gpt-3.5-turbo",
+                model="openai/gpt-3.5-turbo",  # ✅ Corrected model ID
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.6,
                 max_tokens=200
             )
-            
             st.success(response.choices[0].message["content"])
         except Exception as e:
             st.error(f"Error answering question: {e}")
