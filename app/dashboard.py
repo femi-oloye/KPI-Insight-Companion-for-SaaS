@@ -14,7 +14,7 @@ openai.api_key = os.getenv("OPENROUTER_API_KEY")  # Use the correct API key
 st.set_page_config(page_title="SaaS KPI Agent", layout="wide")
 
 # Load Data
-df = pd.read_csv("/home/oluwafemi/ai-agents kpi saas/.venv/KPI-Insight-Companion-for-SaaS/data/mock_saas_data.csv", parse_dates=["date"])
+df = pd.read_csv("/data/mock_saas_data.csv", parse_dates=["date"])
 
 # Calculate Monthly Subscription Fee per Active User
 df["monthly_subscription_fee"] = df["revenue"] / df["active_users"]
