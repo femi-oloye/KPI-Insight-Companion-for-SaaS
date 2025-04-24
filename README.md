@@ -5,6 +5,7 @@ Welcome to the **AI-Powered SaaS KPI Insight Agent**, an intelligent dashboard b
 🚀 Developed by: **InsightLoop AI**  
 🎯 Role: *AI Automation Strategist (Freelance / Contract)*  
 🛠 Built with: Python · Streamlit · GPT (OpenRouter) · Plotly · Pandas
+live app: https://ai-powered-saas-kpi-insight-agent.streamlit.app/
 
 ---
 
