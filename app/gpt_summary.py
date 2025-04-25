@@ -21,7 +21,7 @@ def generate_kpi_summary(kpis: dict) -> str:
 
     try:
         response = openai.ChatCompletion.create(
-            model="openai/gpt-3.5-turbo",  # ✅ Corrected
+            model="openai/gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
             max_tokens=250
