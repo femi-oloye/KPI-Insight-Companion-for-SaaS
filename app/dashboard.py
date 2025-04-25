@@ -7,8 +7,8 @@ from alerts import detect_issues
 import openai
 import os
 
-# Set OpenAI API key directly
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Ensure this is set in your environment variables
+# Load OpenAI API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 st.set_page_config(page_title="SaaS KPI Agent", layout="wide")
 
