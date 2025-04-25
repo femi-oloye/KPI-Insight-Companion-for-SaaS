@@ -7,22 +7,25 @@ from alerts import detect_issues
 import openai
 import os
 
-# Set OpenRouter API base and key
-openai.api_base = "https://openrouter.ai/api/v1"
-openai.api_key = os.getenv("OPENROUTER_API_KEY")
+# Set OpenAI API key directly
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Ensure this is set in your environment variables
 
 st.set_page_config(page_title="SaaS KPI Agent", layout="wide")
 
 # Load Data
 df = pd.read_csv("data/mock_saas_data.csv", parse_dates=["date"])
+
+# Calculate Monthly Subscription Fee per Active User
 df["monthly_subscription_fee"] = df["revenue"] / df["active_users"]
+
+# Calculate MRR and ARR
 df["mrr"] = df["revenue"]
 df["arr"] = df["mrr"] * 12
 
 # Calculate KPIs
 kpis = calculate_kpis(df)
 
-# KPI Cards
+# Show KPI Cards
 st.markdown("### 📊 Key Performance Indicators")
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 col1.metric("CAC", f"${kpis['CAC']}")
@@ -35,8 +38,11 @@ col6.metric("ARR", f"${df['arr'].sum():,.2f}")
 # AI Summary
 st.markdown("### 🧠 AI-Generated KPI Insight")
 with st.spinner("Analyzing KPIs..."):
-    summary = generate_kpi_summary(kpis)
-    st.info(summary)
+    try:
+        summary = generate_kpi_summary(kpis)
+        st.info(summary)
+    except Exception as e:
+        st.error(f"Error generating AI summary: {e}")
 
 # Natural Language Q&A
 st.markdown("### 💬 Ask About KPIs")
@@ -59,24 +65,23 @@ if user_question:
             Answer in a clear, helpful tone.
             """
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo",  # Corrected to use OpenAI's GPT model
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.6,
                 max_tokens=200
             )
-            if "choices" in response:
-                st.success(response["choices"][0]["message"]["content"])
-            else:
-                st.error("OpenAI returned an unexpected response.")
-                st.json(response)
+            st.success(response['choices'][0]['message']['content'])
         except Exception as e:
             st.error(f"Error answering question: {e}")
 
 # AI Alerts
 st.markdown("### 🔔 KPI Alerts & AI Recommendations")
 with st.spinner("Scanning for risks..."):
-    alerts = detect_issues(kpis)
-    st.warning(alerts)
+    try:
+        alerts = detect_issues(kpis)
+        st.warning(alerts)
+    except Exception as e:
+        st.error(f"Error generating alerts: {e}")
 
 # Tabs for Visualization
 tab1, tab2 = st.tabs(["📈 Sales KPIs", "📣 Marketing KPIs"])
