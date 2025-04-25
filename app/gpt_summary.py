@@ -1,7 +1,6 @@
 import openai
 import streamlit as st
 
-# Load OpenAI API key from Streamlit secrets
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def generate_kpi_summary(kpis: dict) -> str:
@@ -25,5 +24,6 @@ def generate_kpi_summary(kpis: dict) -> str:
             max_tokens=250
         )
         return response['choices'][0]['message']['content'].strip()
-    except openai.OpenAIError as e:
+    except Exception as e:
+        st.exception(e)  # <--- Show full error traceback in app
         return "An error occurred while generating the KPI summary."
