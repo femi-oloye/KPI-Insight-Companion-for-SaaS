@@ -59,7 +59,7 @@ if user_question:
             Answer in a clear, helpful tone.
             """
             response = openai.ChatCompletion.create(
-                model="openai/gpt-3.5-turbo",
+                model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.6,
                 max_tokens=200
