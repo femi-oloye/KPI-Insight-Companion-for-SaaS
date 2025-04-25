@@ -1,10 +1,8 @@
-import os
 import openai
-from dotenv import load_dotenv
+import os
 
-load_dotenv()
-openai.api_base = "https://openrouter.ai/api/v1"
-openai.api_key = os.getenv("OPENROUTER_API_KEY")
+# Set OpenAI API key directly
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def generate_kpi_summary(kpis: dict) -> str:
     prompt = f"""
@@ -21,16 +19,12 @@ def generate_kpi_summary(kpis: dict) -> str:
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo",  # Corrected to OpenAI model
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
             max_tokens=250
         )
-        print("📦 Full summary response:", response)
-        if "choices" in response:
-            return response["choices"][0]["message"]["content"].strip()
-        else:
-            return "OpenAI returned an unexpected response. Please check your API key or model settings."
-    except Exception as e:
-        print("❌ Error generating KPI summary:", e)
-        return f"An error occurred while generating the KPI summary: {e}"
+        return response['choices'][0]['message']['content'].strip()
+    except openai.OpenAIError as e:
+        print(f"Error: {e}")
+        return "An error occurred while generating the KPI summary."
