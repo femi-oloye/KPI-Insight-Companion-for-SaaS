@@ -5,10 +5,9 @@ from kpi_engine import calculate_kpis
 from gpt_summary import generate_kpi_summary
 from alerts import detect_issues
 import openai
-import os
 
 # Load OpenAI API key from Streamlit secrets
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 st.set_page_config(page_title="SaaS KPI Agent", layout="wide")
 
@@ -42,7 +41,7 @@ with st.spinner("Analyzing KPIs..."):
         summary = generate_kpi_summary(kpis)
         st.info(summary)
     except Exception as e:
-        st.error(f"Error generating AI summary: {e}")
+        st.error("An error occurred while generating the KPI summary.")
 
 # Natural Language Q&A
 st.markdown("### 💬 Ask About KPIs")
@@ -65,14 +64,14 @@ if user_question:
             Answer in a clear, helpful tone.
             """
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # Corrected to use OpenAI's GPT model
+                model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.6,
                 max_tokens=200
             )
             st.success(response['choices'][0]['message']['content'])
         except Exception as e:
-            st.error(f"Error answering question: {e}")
+            st.error("An error occurred while answering the question.")
 
 # AI Alerts
 st.markdown("### 🔔 KPI Alerts & AI Recommendations")
@@ -81,7 +80,7 @@ with st.spinner("Scanning for risks..."):
         alerts = detect_issues(kpis)
         st.warning(alerts)
     except Exception as e:
-        st.error(f"Error generating alerts: {e}")
+        st.error("An error occurred while generating alerts.")
 
 # Tabs for Visualization
 tab1, tab2 = st.tabs(["📈 Sales KPIs", "📣 Marketing KPIs"])
