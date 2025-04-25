@@ -26,7 +26,11 @@ def detect_issues(kpis: dict) -> str:
             temperature=0.5,
             max_tokens=250
         )
-        return response['choices'][0]['message']['content'].strip()
-    except openai.OpenAIError as e:
-        print(f"Error: {e}")
-        return "An error occurred while generating alerts."
+        print("🔔 Full alert response:", response)
+        if "choices" in response:
+            return response["choices"][0]["message"]["content"].strip()
+        else:
+            return "OpenAI returned an unexpected response. Please check your quota or model."
+    except Exception as e:
+        print("❌ Error generating alerts:", e)
+        return f"An error occurred while generating alerts: {e}"
