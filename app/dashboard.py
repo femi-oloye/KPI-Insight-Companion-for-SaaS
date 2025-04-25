@@ -71,7 +71,7 @@ if user_question:
                 temperature=0.6,
                 max_tokens=200
             )
-            st.success(response.choices[0].message["content"])
+            st.success(response['choices'][0]['message']['content'])
         except Exception as e:
             st.error(f"Error answering question: {e}")
 
