@@ -2,7 +2,7 @@ import openai
 import os
 
 # Set OpenAI API key directly
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def detect_issues(kpis: dict) -> str:
     alert_prompt = f"""
