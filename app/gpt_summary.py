@@ -1,8 +1,8 @@
 import openai
-import os
+import streamlit as st
 
-# Set OpenAI API key directly
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Load OpenAI API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def generate_kpi_summary(kpis: dict) -> str:
     prompt = f"""
@@ -19,12 +19,11 @@ def generate_kpi_summary(kpis: dict) -> str:
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Corrected to OpenAI model
+            model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
             max_tokens=250
         )
         return response['choices'][0]['message']['content'].strip()
     except openai.OpenAIError as e:
-        print(f"Error: {e}")
         return "An error occurred while generating the KPI summary."
