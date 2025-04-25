@@ -26,7 +26,7 @@ def generate_kpi_summary(kpis: dict) -> str:
             temperature=0.7,
             max_tokens=250
         )
-        return response.choices[0].message["content"].strip()
+        return response['choices'][0]['message']['content'].strip()
     except openai.OpenAIError as e:
         print(f"Error: {e}")
         return "An error occurred while generating the KPI summary."
