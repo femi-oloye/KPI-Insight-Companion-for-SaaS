@@ -2,7 +2,7 @@
 
 Welcome to the **AI-Powered SaaS KPI Insight Agent**, an intelligent dashboard built for SaaS startups and marketing teams to monitor key performance indicators (KPIs), uncover insights, and automate reporting using GPT-based AI.
 
-🚀 Developed by: **InsightLoop AI**  
+🚀 Developed by: **oluwafemi oloye**  
 🎯 Role: *AI Automation Strategist (Freelance / Contract)*  
 🛠 Built with: Python · Streamlit · GPT (OpenRouter) · Plotly · Pandas
 live app: https://ai-powered-saas-kpi-insight-agent.streamlit.app/
